@@ -379,7 +379,7 @@ void exec_movzx(CPUX86State *env, struct x86_decode *decode)
     int src_op_size;
     int op_size = decode->operand_size;
 
-    fetch_operands(env, decode, 1, false, false, false);
+    fetch_operands(env, decode, 2, false, false, false);
 
     if (0xb6 == decode->opcode[1]) {
         src_op_size = 1;
