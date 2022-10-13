@@ -160,7 +160,7 @@ void write_val_to_reg(target_ulong reg_ptr, target_ulong val, int size)
         *(uint16_t *)reg_ptr = val;
         break;
     case 4:
-        *(uint64_t *)reg_ptr = (uint32_t)val;
+        *(uint32_t *)reg_ptr = (uint32_t)val;
         break;
     case 8:
         *(uint64_t *)reg_ptr = val;
