@@ -19,7 +19,7 @@
 #ifndef HVF_X86_H
 #define HVF_X86_H
 
-typedef struct x86_register {
+typedef struct x86_register64 {
     union {
         struct {
             uint64_t rrx;               /* full 64 bit */
@@ -40,7 +40,28 @@ typedef struct x86_register {
             uint32_t hi32_unused3;
         };
     };
+} __attribute__ ((__packed__)) x86_register64;
+
+typedef struct x86_register {
+    union {
+        struct {
+            uint32_t rrx;
+        };
+        struct {
+            uint32_t erx;               /* low 32 bit part */
+        };
+        struct {
+            uint16_t rx;                /* low 16 bit part */
+            uint16_t hi16_unused1;
+        };
+        struct {
+            uint8_t lx;                 /* low 8 bit part */
+            uint8_t hx;                 /* high 8 bit */
+            uint16_t hi16_unused2;
+        };
+    };
 } __attribute__ ((__packed__)) x86_register;
+
 
 /* 16 bit Task State Segment */
 typedef struct x86_tss_segment16 {
@@ -195,7 +216,11 @@ typedef struct x68_segment_selector {
 } __attribute__ ((__packed__)) x68_segment_selector;
 
 /* useful register access  macros */
+#if CPU_NB_REGS == 8
 #define x86_reg(cpu, reg) ((x86_register *) &cpu->regs[reg])
+#else
+#define x86_reg(cpu, reg) ((x86_register64 *) &cpu->regs[reg])
+#endif
 
 #define RRX(cpu, reg)   (x86_reg(cpu, reg)->rrx)
 #define RAX(cpu)        RRX(cpu, R_EAX)
